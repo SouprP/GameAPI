@@ -1,0 +1,8 @@
+name: GameAPI
+version: '${project.version}'
+main: me.souprpk.gameapi.GameAPI
+api-version: 1.18
+prefix: GameAPI
+load: STARTUP
+authors: [ SouprPK ]
+description: API to create and handle minigames
