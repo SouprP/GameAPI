@@ -31,6 +31,7 @@ public class GameSettings {
     private boolean disableVanillaJoinLeaveMessages;
     private boolean displayVanillaDeathMessages;
     private boolean resetWorlds;
+    private boolean spawnBodyOnDeath;
 
     public GameSettings(){
         loadDefaults();
@@ -62,6 +63,7 @@ public class GameSettings {
         this.enableBungee = false;
         this.displayVanillaDeathMessages = true;
         this.resetWorlds = false;
+        this.spawnBodyOnDeath = false;
     }
 
     public boolean shouldResetWorlds(){
@@ -409,5 +411,13 @@ public class GameSettings {
 
     public void setHealthLevel(double healthLevel) {
         this.healthLevel = healthLevel;
+    }
+
+    public void setSpawnBodyOnDeath(boolean value){
+        this.spawnBodyOnDeath = value;
+    }
+
+    public boolean getSpawnBodyOnDeath(){
+        return this.spawnBodyOnDeath;
     }
 }

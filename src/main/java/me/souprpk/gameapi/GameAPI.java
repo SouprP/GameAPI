@@ -1,7 +1,6 @@
 package me.souprpk.gameapi;
 
 import me.souprpk.gameapi.api.listeners.*;
-import me.souprpk.gameapi.enums.GameType;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -13,6 +12,11 @@ public final class GameAPI{
 
     private static File gameWorlds;
 
+    /**
+     * Registers all the needed listeners,
+     * if you don't do this the plugin won't work correctly
+     * @param plugin
+     */
     public GameAPI(Plugin plugin){
         this.plugin = plugin;
 
@@ -20,7 +24,7 @@ public final class GameAPI{
         Bukkit.getPluginManager().registerEvents(new SettingsListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerPvPListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), plugin);
-        //Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ServerPingListener(), plugin);
         //getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
@@ -29,11 +33,6 @@ public final class GameAPI{
 
         if(!gameWorlds.exists()){
             gameWorlds.mkdir();
-            for(GameType gameType : GameType.values()){
-                File dir = new File(gameWorlds.getName() + "/" + gameType.name());
-                if(!dir.exists())
-                    dir.mkdir();
-            }
         }
         if(!plugin.getDataFolder().exists()){
             plugin.getDataFolder().mkdir();

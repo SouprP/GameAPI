@@ -6,6 +6,7 @@ import me.souprpk.gameapi.GameAPI;
 import me.souprpk.gameapi.api.events.*;
 import me.souprpk.gameapi.api.managers.PlayerManager;
 import me.souprpk.gameapi.api.managers.TeamManager;
+import me.souprpk.gameapi.api.nms.Body;
 import me.souprpk.gameapi.enums.GamePlayerState;
 import me.souprpk.gameapi.enums.GameState;
 import me.souprpk.gameapi.enums.GameType;
@@ -13,6 +14,7 @@ import me.souprpk.gameapi.enums.TeamSpreadType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.ChannelNotRegisteredException;
 
@@ -54,6 +56,7 @@ public class Game {
     private int currentCountdown;
 
     private Runnable loop;
+    private HashMap<Body, Boolean> bodies;
 
     public Game(String id, Arena arena, GameType gameType, Plugin plugin){
         this.id = id;
@@ -69,6 +72,7 @@ public class Game {
         this.settings = new GameSettings();
         this.currentCountdown = 0;
         this.spawns = new ArrayList<Location>();
+        this.bodies = new HashMap<>();
         this.loop = new Runnable(){
 
             @Override
@@ -571,5 +575,31 @@ public class Game {
      */
     public GameType getGameType(){
         return this.gameType;
+    }
+
+    /**
+     * Returns the list of bodies in this game arena
+     * @return List<Body>
+     */
+    public HashMap<Body, Boolean> getBodies(){
+        return bodies;
+    }
+
+    /**
+     * Adds a new body to the list
+     * @param body
+     */
+    public void addBody(Body body){
+        this.bodies.put(body, true);
+    }
+
+    /**
+     * Removes all bodies and empty's the hashmap
+     */
+    public void clearBodies(){
+        for(Body body : bodies.keySet())
+            body.getArmorStands().forEach(Entity::remove);
+
+        bodies = new HashMap<>();
     }
 }

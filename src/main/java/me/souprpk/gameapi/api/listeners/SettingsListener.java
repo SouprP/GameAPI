@@ -3,8 +3,10 @@ package me.souprpk.gameapi.api.listeners;
 import me.souprpk.gameapi.api.core.ArenaSettings;
 import me.souprpk.gameapi.api.core.Game;
 import me.souprpk.gameapi.api.core.GamePlayer;
+import me.souprpk.gameapi.api.core.GameSettings;
 import me.souprpk.gameapi.api.managers.ArenaManager;
 import me.souprpk.gameapi.api.managers.PlayerManager;
+import me.souprpk.gameapi.api.nms.NMSUtils;
 import me.souprpk.gameapi.utils.EntityUtils;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -123,6 +125,16 @@ public class SettingsListener implements Listener {
             if(!settings.canExpDrop()){
                 e.setDroppedExp(0);
             }
+        }
+
+        if(e.getEntity() instanceof Player){
+            GamePlayer gamePlayer = PlayerManager.getGamePlayer((OfflinePlayer) e.getEntity());
+            if(!gamePlayer.isInGame())
+                return;
+            
+            GameSettings gameSettings = gamePlayer.getGame().getGameSettings();
+            if(gameSettings.getSpawnBodyOnDeath())
+                gamePlayer.getGame().addBody(NMSUtils.spawnCorpse(gamePlayer.getOnlinePlayer()));
         }
     }
 
