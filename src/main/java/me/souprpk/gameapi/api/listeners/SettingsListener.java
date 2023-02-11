@@ -131,7 +131,7 @@ public class SettingsListener implements Listener {
             GamePlayer gamePlayer = PlayerManager.getGamePlayer((OfflinePlayer) e.getEntity());
             if(!gamePlayer.isInGame())
                 return;
-            
+
             GameSettings gameSettings = gamePlayer.getGame().getGameSettings();
             if(gameSettings.getSpawnBodyOnDeath())
                 gamePlayer.getGame().addBody(NMSUtils.spawnCorpse(gamePlayer.getOnlinePlayer()));
