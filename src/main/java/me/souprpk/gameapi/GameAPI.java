@@ -1,8 +1,12 @@
 package me.souprpk.gameapi;
 
+import me.souprpk.gameapi.api.listeners.*;
+import me.souprpk.gameapi.enums.GameType;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+
 
 public final class GameAPI{
     private static Plugin plugin;
@@ -12,29 +16,30 @@ public final class GameAPI{
     public GameAPI(Plugin plugin){
         this.plugin = plugin;
 
+        Bukkit.getPluginManager().registerEvents(new PlayerMovementListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new SettingsListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new PlayerPvPListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), plugin);
+        //Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ServerPingListener(), plugin);
+        //getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
+
         gameWorlds = new File("GameWorlds");
 
         if(!gameWorlds.exists()){
             gameWorlds.mkdir();
+            for(GameType gameType : GameType.values()){
+                File dir = new File(gameWorlds.getName() + "/" + gameType.name());
+                if(!dir.exists())
+                    dir.mkdir();
+            }
         }
         if(!plugin.getDataFolder().exists()){
             plugin.getDataFolder().mkdir();
         }
 
     }
-    /*@Override
-    public void onEnable() {
-        // Plugin startup logic
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }*/
-
-    /*public GameAPI getGameAPI(){
-        return this;
-    }*/
 
     public static File getGameWorldsFolder(){
         return gameWorlds;

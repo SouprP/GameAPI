@@ -66,7 +66,7 @@ public class Team {
     }
 
     /**
-     * Whether or not players can damage each other.
+     * Whether players can damage each other.
      * @return boolean
      */
     public boolean allowTeamDamage(){

@@ -8,6 +8,7 @@ import me.souprpk.gameapi.api.managers.PlayerManager;
 import me.souprpk.gameapi.api.managers.TeamManager;
 import me.souprpk.gameapi.enums.GamePlayerState;
 import me.souprpk.gameapi.enums.GameState;
+import me.souprpk.gameapi.enums.GameType;
 import me.souprpk.gameapi.enums.TeamSpreadType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +22,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Game {
 
     private String id;
+
+    private GameType gameType;
 
     private HashMap<GamePlayer, GamePlayerState> playerModes = new HashMap<GamePlayer, GamePlayerState>();
 
@@ -52,14 +55,15 @@ public class Game {
 
     private Runnable loop;
 
-    public Game(String id, Arena arena, GameState status, Plugin plugin){
+    public Game(String id, Arena arena, GameType gameType, Plugin plugin){
         this.id = id;
         this.arena = arena;
+        this.gameType = gameType;
         this.plugin = plugin;
         this.teamManager = new TeamManager();
         this.playerManager = new PlayerManager();
         this.messagePrefix = "";
-        this.status = status;
+        this.status = GameState.STARTING;
         this.areas = new ArrayList<Area>();
         this.players = new ArrayList<GamePlayer>();
         this.settings = new GameSettings();
@@ -559,5 +563,13 @@ public class Game {
      */
     public Arena getArena(){
         return this.arena;
+    }
+
+    /**
+     * Returns game type of this game
+     * @return GameType
+     */
+    public GameType getGameType(){
+        return this.gameType;
     }
 }
