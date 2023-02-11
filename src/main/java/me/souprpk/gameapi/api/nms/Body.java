@@ -18,6 +18,13 @@ public class Body {
         this.armorStands = new ArrayList<>();
     }
 
+    /**
+     * No real use actually
+     * @param whoDied
+     * @param npc
+     * @param armorStands
+     * @param whenDied
+     */
     public Body(UUID whoDied, ServerPlayer npc, List<ArmorStand> armorStands, long whenDied) {
         this.whoDied = whoDied;
         this.npc = npc;
