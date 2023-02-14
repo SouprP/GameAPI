@@ -65,7 +65,8 @@
     <repositories>
         <repository>
             <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <!--<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>-->
+            <url>https://maven.elmakers.com/repository</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -79,8 +80,9 @@
             <artifactId>spigot</artifactId>
             <version>1.18.2-R0.1-SNAPSHOT</version>
             <classifier>remapped-mojang</classifier>
-            <scope>system</scope>
-            <systemPath>${basedir}\src\lib\spigot-1.18.2-R0.1-SNAPSHOT-remapped-mojang.jar</systemPath>
+            <scope>provided</scope>
+            <!--<scope>system</scope>
+            <systemPath>${basedir}\src\lib\spigot-1.18.2-R0.1-SNAPSHOT-remapped-mojang.jar</systemPath>-->
         </dependency>
     </dependencies>
 </project>
