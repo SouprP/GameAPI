@@ -15,11 +15,6 @@
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>${project.artifactId}</artifactId>
-        <version>${project.version}</version>
-        <packaging>${project.packaging}</packaging>
-        <file>C:\Users\PC\.m2\repository\org\spigotmc\spigot\1.18.2-R0.1-SNAPSHOT\spigot-1.18.2-R0.1-SNAPSHOT-remapped-mojang.jar</file>
     </properties>
 
     <distributionManagement>
@@ -84,7 +79,8 @@
             <artifactId>spigot</artifactId>
             <version>1.18.2-R0.1-SNAPSHOT</version>
             <classifier>remapped-mojang</classifier>
-            <scope>compile</scope>
+            <scope>system</scope>
+            <systemPath>${basedir}\src\lib\spigot-1.18.2-R0.1-SNAPSHOT-remapped-mojang.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
