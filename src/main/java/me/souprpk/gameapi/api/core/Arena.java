@@ -109,7 +109,7 @@ public class Arena {
      * Resets the world to saved default.
      * Players should NOT be in the world. As a precaution against world corruption, any players in the world are kicked from the server.
      */
-    public void resetWorld(){
+    public void resetWorld(String gameType){
         GameAPI.sendDebugMessage("Resetting arena world " + this.getWorld().getName() + "!", GameAPI.getPlugin());
         File worldFolder = world.getWorldFolder();
         String worldName = world.getName();
@@ -125,8 +125,8 @@ public class Arena {
                 try {
                     GameAPI.sendDebugMessage("Deleting world " + worldName + "...", GameAPI.getPlugin());
                     FileUtils.delete(worldFolder);
-                    GameAPI.sendDebugMessage("Copying default world from GameWorlds/" + worldName + "...", GameAPI.getPlugin());
-                    FileUtils.copy(new File(GameAPI.getGameWorldsFolder(), worldName), new File(GameAPI.getGameWorldsFolder().getParentFile(), worldName));
+                    GameAPI.sendDebugMessage("Copying default world from arenas/" + gameType + "/" + worldName + "...", GameAPI.getPlugin());
+                    FileUtils.copy(new File(GameAPI.getGameWorldsFolder(),gameType + "/" + worldName), new File(GameAPI.getGameWorldsFolder().getParentFile(), worldName));
                     GameAPI.sendDebugMessage("Loading world " + worldName + " on server...", GameAPI.getPlugin());
                     WorldCreator creator = new WorldCreator(worldName);
                     creator.generatorSettings("3;minecraft:air;127;");

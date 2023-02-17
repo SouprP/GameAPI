@@ -25,7 +25,7 @@ public class PlayerJoinListener implements Listener {
                 break;
             }
         }
-        if(player.getGame().getGameSettings().shouldDisableVanillaJoinLeaveMessages()){
+        if(player.getGame() != null && player.getGame().getGameSettings().shouldDisableVanillaJoinLeaveMessages()){
             e.setJoinMessage("");
         }
 

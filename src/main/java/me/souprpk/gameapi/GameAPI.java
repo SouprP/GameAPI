@@ -17,7 +17,7 @@ public final class GameAPI{
      * if you don't do this the plugin won't work correctly
      * @param plugin
      */
-    public GameAPI(Plugin plugin){
+    public GameAPI(Plugin plugin, File gameWorldFolder){
         this.plugin = plugin;
 
         Bukkit.getPluginManager().registerEvents(new PlayerMovementListener(), plugin);
@@ -27,17 +27,10 @@ public final class GameAPI{
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ServerPingListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ChestOpenListener(), plugin);
         //getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
 
-        gameWorlds = new File("GameWorlds");
-
-        if(!gameWorlds.exists()){
-            gameWorlds.mkdir();
-        }
-        if(!plugin.getDataFolder().exists()){
-            plugin.getDataFolder().mkdir();
-        }
-
+        gameWorlds = gameWorldFolder;
     }
 
     public static File getGameWorldsFolder(){

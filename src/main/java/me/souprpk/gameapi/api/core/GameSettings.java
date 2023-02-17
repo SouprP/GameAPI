@@ -1,5 +1,7 @@
 package me.souprpk.gameapi.api.core;
 
+import me.souprpk.gameapi.enums.LootEnum;
+import me.souprpk.gameapi.api.loot.LootItem;
 import me.souprpk.gameapi.enums.PlayerJoinLimitAction;
 import me.souprpk.gameapi.enums.TeamSpreadType;
 import org.bukkit.GameMode;
@@ -32,6 +34,16 @@ public class GameSettings {
     private boolean displayVanillaDeathMessages;
     private boolean resetWorlds;
     private boolean spawnBodyOnDeath;
+    private boolean randomizeLoot;
+    private boolean restartLootAfterTime;
+    private int secondsToLootRestart;
+    private boolean decreaseWorldBorder;
+    private int secondsToWorldBorderDecrease;
+    private int worldBorderSize;
+    private int maxWorldBorderSize;
+    private int minWorldBorderSize;
+    private LootItem[] lootItems;
+    private boolean useKits;
 
     public GameSettings(){
         loadDefaults();
@@ -64,6 +76,15 @@ public class GameSettings {
         this.displayVanillaDeathMessages = true;
         this.resetWorlds = false;
         this.spawnBodyOnDeath = false;
+        this.randomizeLoot = false;
+        this.restartLootAfterTime = false;
+        this.lootItems = LootEnum.DEFAULT_ITEMS;
+        this.decreaseWorldBorder = false;
+        this.secondsToWorldBorderDecrease = 300;
+        this.worldBorderSize = 400;
+        this.maxWorldBorderSize = 400;
+        this.minWorldBorderSize = 25;
+        this.useKits = false;
     }
 
     public boolean shouldResetWorlds(){
@@ -413,11 +434,130 @@ public class GameSettings {
         this.healthLevel = healthLevel;
     }
 
-    public void setSpawnBodyOnDeath(boolean value){
-        this.spawnBodyOnDeath = value;
+    /**
+     * Set whether or not the game should spawn a body when player dies
+     * Default: false
+     * @param should
+     * ONLY WORKS ON VERSION1.18.2
+     */
+    @Deprecated
+    public void shouldSpawnBodyOnDeath(boolean should){
+        this.spawnBodyOnDeath = should;
     }
 
-    public boolean getSpawnBodyOnDeath(){
+    /**
+     *  Whether or not the game spawns a body when player dies
+     * @return spawnBodyOnDeath
+     * ONLY WORKS ON VERSION1.18.2
+     */
+    @Deprecated
+    public boolean doesSpawnBodyOnDeath(){
         return this.spawnBodyOnDeath;
+    }
+
+    /**
+     * Whether or not the game should spawn loot when a player opens a chest
+     * @param should
+     */
+    public void shouldRandomizeLoot(boolean should){
+        this.randomizeLoot = should;
+    }
+
+    /**
+     * Whether or not the game spawns loot when a player opens a chest
+     * @return randomizeLoot
+     */
+    public boolean doesRandomizeLoot(){
+        return this.randomizeLoot;
+    }
+
+    /**
+     * Whether or not the game should restart loot chests after a specified time passes
+     * @param should
+     */
+    public void shouldRestartLootAfterTimePasses(boolean should){
+        this.restartLootAfterTime = should;
+    }
+
+    /**
+     * Whether or not the game restarts loot chests after a specified time passes
+     * @return restartLootAfterTime
+     */
+    public boolean doesLootRestartsAfterTimePasses(){
+        return this.restartLootAfterTime;
+    }
+
+    /**
+     * Sets the time in seconds after which the game will restart loot chests
+     * Default: 600 seconds
+     * @param seconds
+     */
+    public void setTimeAfterLootRestart(int seconds){
+        this.secondsToLootRestart = seconds;
+    }
+
+    /**
+     * Get the time after which loot chests restart
+     * This does not return current time left till restart
+     * @return secondsToLootRestart
+     */
+    public int getSecondsToRestartLoot(){
+        return this.secondsToLootRestart;
+    }
+
+    public void setLootItems(LootItem[] items){
+        this.lootItems = items;
+    }
+
+    public LootItem[] getLootItems(){
+        return this.lootItems;
+    }
+
+    public boolean doesDecreaseWorldBorder() {
+        return decreaseWorldBorder;
+    }
+
+    public void setDecreaseWorldBorder(boolean should) {
+        this.decreaseWorldBorder = should;
+    }
+
+    public int getWorldBorderSize() {
+        return worldBorderSize;
+    }
+
+    public void setWorldBorderSize(int size) {
+        this.worldBorderSize = size;
+    }
+
+    public int getMaxWorldBorderSize() {
+        return maxWorldBorderSize;
+    }
+
+    public void setMaxWorldBorderSize(int size) {
+        this.maxWorldBorderSize = size;
+    }
+
+    public int getMinWorldBorderSize() {
+        return minWorldBorderSize;
+    }
+
+    public void setMinWorldBorderSize(int size) {
+        this.minWorldBorderSize = size;
+    }
+
+    public int getSecondsToWorldBorderDecrease() {
+        return secondsToWorldBorderDecrease;
+    }
+
+    public void setSecondsToWorldBorderDecrease(int secondsToWorldBorderDecrease) {
+        this.secondsToWorldBorderDecrease = secondsToWorldBorderDecrease;
+    }
+
+    public boolean doesUseKits() {
+        return useKits;
+    }
+
+    public void shouldUseKits(boolean should) {
+        this.useKits = should;
     }
 }

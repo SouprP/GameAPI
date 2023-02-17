@@ -4,6 +4,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import me.souprpk.gameapi.GameAPI;
 import me.souprpk.gameapi.api.events.*;
+import me.souprpk.gameapi.enums.LootEnum;
+import me.souprpk.gameapi.api.managers.ChestManager;
 import me.souprpk.gameapi.api.managers.PlayerManager;
 import me.souprpk.gameapi.api.managers.TeamManager;
 import me.souprpk.gameapi.api.nms.Body;
@@ -27,7 +29,7 @@ public class Game {
 
     private GameType gameType;
 
-    private HashMap<GamePlayer, GamePlayerState> playerModes = new HashMap<GamePlayer, GamePlayerState>();
+    private HashMap<GamePlayer, GamePlayerState> playerModes = new HashMap<>();
 
     private GameState status;
 
@@ -47,16 +49,22 @@ public class Game {
 
     private List<GamePlayer> players;
 
-    private HashMap<GamePlayer, Integer> kills = new HashMap<GamePlayer, Integer>();
+    private HashMap<GamePlayer, Integer> kills = new HashMap<>();
 
     private List<Location> spawns;
 
     private boolean countingDown;
 
     private int currentCountdown;
+    private int currentChestCountdown;
+    private int currentWorldCountdown;
+    private boolean alreadyRestartedLoot;
 
     private Runnable loop;
+
     private HashMap<Body, Boolean> bodies;
+
+    private ChestManager chestManager;
 
     public Game(String id, Arena arena, GameType gameType, Plugin plugin){
         this.id = id;
@@ -65,12 +73,16 @@ public class Game {
         this.plugin = plugin;
         this.teamManager = new TeamManager();
         this.playerManager = new PlayerManager();
+        this.chestManager = new ChestManager(arena, LootEnum.NULL);
         this.messagePrefix = "";
         this.status = GameState.STARTING;
         this.areas = new ArrayList<Area>();
         this.players = new ArrayList<GamePlayer>();
         this.settings = new GameSettings();
         this.currentCountdown = 0;
+        this.currentChestCountdown = 0;
+        this.currentWorldCountdown = 0;
+        this.alreadyRestartedLoot = false;
         this.spawns = new ArrayList<Location>();
         this.bodies = new HashMap<>();
         this.loop = new Runnable(){
@@ -111,6 +123,28 @@ public class Game {
                         }
                     }
                 }
+
+                if(game.getGameStatus() == GameState.ACTIVE && game.getGameSettings().doesRandomizeLoot() && game.getGameSettings().doesLootRestartsAfterTimePasses()){
+                    if(!alreadyRestartedLoot){
+                        if(currentChestCountdown < game.getGameSettings().getSecondsToRestartLoot()){
+                            currentChestCountdown++;
+                        }
+                        else{
+                            currentChestCountdown = 0;
+                            chestManager.resetChests();
+                        }
+                    }
+                }
+
+                if(game.getGameStatus() == GameState.ACTIVE && game.getGameSettings().doesDecreaseWorldBorder()) {
+                    if (currentWorldCountdown < game.getGameSettings().getSecondsToWorldBorderDecrease()) {
+                        currentWorldCountdown++;
+                    } else {
+                        currentWorldCountdown = 0;
+                        decreaseWorldBorder();
+                    }
+                }
+
                 game.getRunnable().run();
             }
 
@@ -153,7 +187,7 @@ public class Game {
     }
 
     public List<GamePlayer> getGamePlayerByMode(GamePlayerState type){
-        List<GamePlayer> players = new ArrayList<GamePlayer>();
+        List<GamePlayer> players = new ArrayList<>();
         for(GamePlayer player : this.getPlayers()){
             if(this.getGamePlayerState(player).equals(type)){
                 players.add(player);
@@ -291,23 +325,27 @@ public class Game {
         this.setGameStatus(GameState.RESTARTING);
         GameEndEvent ev = new GameEndEvent(this);
         Bukkit.getPluginManager().callEvent(ev);
-        List<GamePlayer> players = new CopyOnWriteArrayList<GamePlayer>(this.getPlayers());
-        this.playerModes = new HashMap<GamePlayer, GamePlayerState>();
+        List<GamePlayer> players = new CopyOnWriteArrayList<>(this.getPlayers());
+        this.playerModes = new HashMap<>();
         for(GamePlayer pl : players){
             this.removePlayer(pl);
         }
-        this.setGameStatus(GameState.STARTING);
         if(this.getGameSettings().shouldResetWorlds()){
             final Game game = this;
             Bukkit.getScheduler().scheduleSyncDelayedTask(GameAPI.getPlugin(), new Runnable(){
 
                 @Override
                 public void run() {
-                    game.arena.resetWorld();
+                    game.arena.resetWorld(gameType.toString().toLowerCase());
                 }
 
             }, 5L);
         }
+        this.currentWorldCountdown = 0;
+        this.currentChestCountdown = 0;
+        this.arena.getWorld().getWorldBorder().setSize(getGameSettings().getWorldBorderSize());
+
+        this.setGameStatus(GameState.STARTING);
     }
 
     public void endGameWithDelay(long seconds){
@@ -320,7 +358,6 @@ public class Game {
 
         }, seconds * 20);
     }
-
     /**
      * Add a player to a randomly selected team. Team selection mode is defined by GameSettings.getTeamSpreadType().
      *
@@ -601,5 +638,22 @@ public class Game {
             body.getArmorStands().forEach(Entity::remove);
 
         bodies = new HashMap<>();
+    }
+
+    /**
+     * Returns the ChestManager used in this game
+     * @return chestManager
+     */
+    public ChestManager getChestManager(){
+        return this.chestManager;
+    }
+
+    private void decreaseWorldBorder() {
+        int alive = getGamePlayerByMode(GamePlayerState.ALIVE).size();
+        double size = arena.getWorld().getWorldBorder().getSize() / 2;
+        if(size <= getGameSettings().getMinWorldBorderSize())
+            return;
+
+        arena.getWorld().getWorldBorder().setSize(size, alive * 10 * 20L);
     }
 }

@@ -1,5 +1,8 @@
 package me.souprpk.gameapi.api.core;
 
+import me.souprpk.gameapi.api.kits.KitItem;
+import me.souprpk.gameapi.api.kits.PlayerKit;
+import me.souprpk.gameapi.enums.InventorySlot;
 import me.souprpk.gameapi.utils.LocationUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -14,6 +17,8 @@ public class GamePlayer {
     private Team team;
 
     private Game game;
+
+    private PlayerKit kit;
 
     public GamePlayer(OfflinePlayer player){
         this.player = player;
@@ -109,5 +114,23 @@ public class GamePlayer {
 
         }
         return areas;
+    }
+
+    public void setKit(PlayerKit kit){
+        this.kit = kit;
+    }
+
+    public void giveKit(){
+        Player p = getOnlinePlayer();
+        int i = InventorySlot.BACKPACK.getIndex();
+        for(KitItem item : kit.getKitItems()){
+            if(item.getSlot() == InventorySlot.BACKPACK){
+                p.getInventory().setItem(i, item.getKitItem());
+                i++;
+            }
+            else{
+                p.getInventory().setItem(item.getSlot().getIndex(), item.getKitItem());
+            }
+        }
     }
 }
