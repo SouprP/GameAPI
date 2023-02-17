@@ -133,7 +133,7 @@ public class SettingsListener implements Listener {
                 return;
 
             GameSettings gameSettings = gamePlayer.getGame().getGameSettings();
-            if(gameSettings.getSpawnBodyOnDeath())
+            if(gameSettings.doesSpawnBodyOnDeath())
                 gamePlayer.getGame().addBody(NMSUtils.spawnCorpse(gamePlayer.getOnlinePlayer()));
         }
     }
