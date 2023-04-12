@@ -1,7 +1,9 @@
 # GameAPI
 
 ## Note
-This is a fork of [scarabcoder GameAPI](https://github.com/scarabcoder/GameAPI).
+This is a fork of [scarabcoder GameAPI](https://github.com/scarabcoder/GameAPI). 
+
+Some code has been redone completly aand optimized, there are also some new features.
 
 # Latest: Beta 0.4.1
 
