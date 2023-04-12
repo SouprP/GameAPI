@@ -1,5 +1,8 @@
 # GameAPI
 
+## Note
+This is a fork of [scarabcoder GameAPI](https://github.com/scarabcoder/GameAPI).
+
 # Latest: Release 0.4.0
 
 GameAPI is a plugin-library used for Spigot plugins. 
