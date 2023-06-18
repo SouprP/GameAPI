@@ -12,6 +12,15 @@ Simply put, you no longer have to worry about coding common things in minigames 
 ,arena management, tablists, seperate worlds. It allows the developer to concentrate on the 
 minigame itself.
 
+## List of all features:
+- Arena creator
+- Arena settings
+- Custom events
+- Random loot
+- Kits
+- Teams
+- Matchmaking
+
 ## Arena creation and settings
 Every arena can have it's own settings ranging from block destruction enabling, weather, border size and other.
 With every update there will be more and more settings.
